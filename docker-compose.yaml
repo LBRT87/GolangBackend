@@ -1,0 +1,92 @@
+services:
+  auth-service:
+    build:
+      context: .
+      dockerfile: services/auth-service/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./web-backend/auth-service/:app
+      - /app/tmp
+      # - Contractsnya
+    depends_on:
+      - pgpool
+
+  postgres-master:
+    image: bitnami/postgresql:latest
+    environment:
+      POSTGRESQL_USERNAME: 
+      POSTGRESQL_PASSWORD:
+      POSTGRESQL_REPLICATION_MODE: master # master or slave
+      POSTGRESQL_REPLICATION_USER:
+      POSTGRESQL_REPLICATION_PASSWORD:
+    volumes:
+      - postgres_master_data:/bitnami.postgresql
+      - ./init-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 10
+    networks:
+      - esdemy-network
+  
+  postgres-slave:
+    image: bitnami/postgresql:latest
+    environment:
+      POSTGRESQL_USERNAME: 
+      POSTGRESQL_PASSWORD:
+      POSTGRESQL_REPLICATION_MODE: slave # master or slave
+      POSTGRESQL_REPLICATION_USER:
+      POSTGRESQL_REPLICATION_PASSWORD:
+      POSTGRESQL_MASTER_HOST: postgres-master
+      POSTGRESQL_MASTER_PORT: 5432 # tetapan
+    depends_on:
+      postgres_master:
+        condition: service_healthy
+    volumes:
+      - postgres_slave_data:/bitnami.postgresql
+    networks:
+      - esdemy-network
+
+  pgpool:
+    image: mrgreen007/pgpool:latest
+    environment:
+      PGPOOL_BACKEND_NODES: 0:postgres-master:5432, 1:postgres_slave:5432
+      PGPOOL_SR_CHECK_USER: ${POSTGRESQL_REPL_USER} # untuk cek username
+      PGPOOL_SR_CHECK_PASSWORD: ${POSTGRES_REPL_PASSWORD} # untuk cek password
+      PGPOOL_POSTGRES_USERNAME: ${POSTGRES_USER}
+      PGPOOL_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGPOOL_ADMIN_USERNAME: ${PGPOOL_ADMIN_USER}
+      PGPOOL_ADMIN_PASSWORD: ${PGPOOL_ADMIN_PASSWORD}
+      PGPOOL_ENABLE_LDAP: no # untuk local wajib dimatikan karena gak ada server ldap 
+    ports:
+      - "5432:5432"
+    depends_on:
+      postgres-master:
+        condition: service_healthy
+      postgres_slave:
+        condition: service_started
+    networks:
+      - esdemy-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - auth-service
+    networks:
+      - esdemy-network
+
+networks:
+  esdemy-network:
+    driver: bridge
+
+volumes:
+  postgres_master_data:
+  postgres_slave_data:
