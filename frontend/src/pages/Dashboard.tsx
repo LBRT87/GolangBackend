@@ -1,4 +1,5 @@
-import type { User } from "../dto/types";
+import type { User } from "../dto/User";
+import Navigation from '../components/Navigation'
 
 interface DashboardProps {
     user: User,
@@ -7,7 +8,8 @@ interface DashboardProps {
 
 export default function Dashboard({ user, onLogout }: DashboardProps) {
     return (
-        <div className="w-full max-w-md bg-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
+        <div className="w-full bg-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
+            <Navigation user={user} onLogout={onLogout}/>
             <div className="flex justify-between items-center">
                 <h1 className="text-lg font-bold text-white">Halo, {user.username}</h1>
                 <button onClick={onLogout} className="bg-red-600 hover:bg-red-500 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all">

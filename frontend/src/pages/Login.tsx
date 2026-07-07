@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { req } from "../api/api";
-import type { LoginResponse, User } from "../dto/types";
+import type { LoginResponse, User } from "../dto/User";
 import { useGoogleLogin } from "@react-oauth/google";
 
 interface LoginProps {
@@ -38,6 +38,8 @@ export default function Login({ onLoginSuccess, onNavigate }: LoginProps) {
                 localStorage.setItem('access_token', data.access_token);
                 localStorage.setItem('refresh_token', data.refresh_token);
                 localStorage.setItem('user_role', data.user.role)
+
+                onLoginSuccess(data.user);
             } catch (err){
                 setError(err instanceof Error ? err.message : 'Google login failed')
             }

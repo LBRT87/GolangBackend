@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { req } from "../api/api";
-import type { RegisterResponse } from "../dto/types";
+import type { RegisterResponse } from "../dto/User";
 
 interface RegisterProps {
     onOtpSent: (email: string) => void;
