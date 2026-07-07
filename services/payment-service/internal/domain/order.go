@@ -1,7 +1,7 @@
 package domain
 
 type Order struct{
-	ID string `gorm:"primaryKey;type:uuid"`
+	ID string `gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
 	UserId string
 	GatewayOrderId string
 	PaymentUrl string
@@ -10,7 +10,7 @@ type Order struct{
 }
 
 type OrderItem struct{
-	Id string `gorm:"primaryKey;type:uuid"`
+	Id string `gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
 	OrderId string
 	CourseId string
 	UserId string
@@ -28,7 +28,6 @@ type OrderRepository interface{
 
 type OrderItemRepository interface{
 	Create(orderItem OrderItem) error
-	FindById(orderItemId string) (OrderItem, error)
 	FindByOrderId(orderItemId string) ([]OrderItem, error)
 	CreateBatch(orderItems []OrderItem) error
 	ListByLecturer(LecturerId string) ([]OrderItem, error)

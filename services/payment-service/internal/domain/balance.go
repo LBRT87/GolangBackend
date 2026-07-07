@@ -10,7 +10,7 @@ type LecturerBalance struct {
 }
 
 type Withdrawal struct{
-	Id string `gorm:"primaryKey;type:uuid"`
+	Id string `gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
 	LecturerId string
 	amount int64
 	WithdrawnAt time.Time
