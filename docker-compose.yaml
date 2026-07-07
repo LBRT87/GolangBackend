@@ -71,6 +71,22 @@ services:
     networks:
       - esdemy-network
 
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - auth-service
+    networks:
+      - esdemy-network
+
 networks:
   esdemy-network:
     driver: bridge
+
+volumes:
+  postgres_master_data:
+  postgres_slave_data:
