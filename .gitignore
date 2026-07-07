@@ -1,0 +1,39 @@
+# Environment files
+.env
+*.env
+!.env.example
+
+# Go build output
+tmp/
+*.exe
+*.out
+bin/
+
+# Go vendor
+vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node / React
+node_modules/
+dist/
+.vite/
+
+# Docker volumes (local data)
+*-data/
+
+# Logs
+*.log

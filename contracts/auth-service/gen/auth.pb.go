@@ -71,6 +71,7 @@ type VerifyTokenResponse struct {
 	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
 	Role          string                 `protobuf:"bytes,4,opt,name=role,proto3" json:"role,omitempty"`
+	IsVerified    bool                   `protobuf:"varint,5,opt,name=is_verified,json=isVerified,proto3" json:"is_verified,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -131,6 +132,13 @@ func (x *VerifyTokenResponse) GetRole() string {
 		return x.Role
 	}
 	return ""
+}
+
+func (x *VerifyTokenResponse) GetIsVerified() bool {
+	if x != nil {
+		return x.IsVerified
+	}
+	return false
 }
 
 type GetUserRequest struct {
@@ -252,12 +260,14 @@ const file_auth_proto_rawDesc = "" +
 	"\n" +
 	"auth.proto\x12\x04auth\"*\n" +
 	"\x12VerifyTokenRequest\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token\"t\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\"\x95\x01\n" +
 	"\x13VerifyTokenResponse\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
 	"\busername\x18\x03 \x01(\tR\busername\x12\x12\n" +
-	"\x04role\x18\x04 \x01(\tR\x04role\")\n" +
+	"\x04role\x18\x04 \x01(\tR\x04role\x12\x1f\n" +
+	"\vis_verified\x18\x05 \x01(\bR\n" +
+	"isVerified\")\n" +
 	"\x0eGetUserRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x04R\x06userId\"g\n" +
 	"\x0fGetUserResponse\x12\x0e\n" +

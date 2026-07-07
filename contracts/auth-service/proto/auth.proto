@@ -17,6 +17,7 @@ message VerifyTokenResponse {
     string email = 2 ;
     string username = 3 ;
     string role = 4 ;
+    bool is_verified = 5 ;
 }
 
 message GetUserRequest {
