@@ -14,6 +14,7 @@ export default function Register({ onNavigate, onOtpSent }: RegisterProps){
         e.preventDefault();
         setError('');
         const fields = Object.fromEntries(new FormData(e.currentTarget));
+        console.log(fields)
         try {
             await req<RegisterResponse>('auth/register', fields);
             onOtpSent(fields.email as string);
@@ -29,9 +30,9 @@ export default function Register({ onNavigate, onOtpSent }: RegisterProps){
             {error && <div className="bg-red-500/20 border border-red-500 text-red-300 p-3 rounded-lg text-xs">{error}</div>}
             
             <form onSubmit={handleSubmit} className="space-y-4">
-                <input type="text" name="username" placeholder="Username" required className="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-emerald-500" />
+                <input type="text" name="username" placeholder="Username" minLength={3} required className="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-emerald-500" />
                 <input type="email" name="email" placeholder="Email" required className="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-emerald-500" />
-                <input type="password" name="password" placeholder="Password" required className="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-emerald-500" />
+                <input type="password" name="password" placeholder="Password" minLength={6} required className="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-emerald-500" />
                 <input type="date" name="dob" required className="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-emerald-500" />
                 <button className="w-full bg-emerald-600 hover:bg-emerald-500 py-2.5 rounded-lg text-sm font-semibold text-white">Daftar</button>
             </form>
